@@ -13,6 +13,8 @@ import time
 import openpyxl as excel
 
 # function to read contacts from a text file
+
+
 def readContacts(fileName):
     lst = []
     file = excel.load_workbook(fileName)
@@ -24,6 +26,7 @@ def readContacts(fileName):
         lst.append(contact)
     return lst
 
+
 # Target Contacts, keep them in double colons
 # Not tested on Broadcast
 targets = readContacts("contacts.xlsx")
@@ -34,7 +37,7 @@ print(targets)
 # Driver to open a browser
 driver = webdriver.Firefox()
 
-#link to open a site
+# link to open a site
 driver.get("https://web.whatsapp.com/")
 
 # 10 sec wait time to load, if good internet connection is not good then increase the time
@@ -59,14 +62,14 @@ curMin = curTime.time().minute
 curSec = curTime.time().second
 
 msgToSend = [
-                # [curHour, curMin, curSec, Keys.SHIFT + Keys.ENTER + "https://media.giphy.com/media/l0HUoJEvqeH7IWZ9e/source.gif" +  "Hello! This is test Msg. Please Ignore." ]
-                [curHour, curMin, curSec, Keys.SHIFT + Keys.ENTER + "Hello good people's, Since i got no response on my ✔️ msg, I thought i could annoy you with this cron job of same thread until i get a response",
-                 "So will refrase again, Kuna mtu nilimuazima begi langu la nguo, nime msahau, Kama anakumbuka naomba anipe status ya ilo begi Nina shida nalo. @mtuchi out 😎 ✌️", ]
-            ]
+    # [curHour, curMin, curSec, Keys.SHIFT + Keys.ENTER + "https://media.giphy.com/media/l0HUoJEvqeH7IWZ9e/source.gif" +  "Hello! This is test Msg. Please Ignore." ]
+    [curHour, curMin, curSec, Keys.SHIFT + Keys.ENTER + "Hello good people's, Since i got no response on my ✔️ msg, I thought i could annoy you with this cron job of same thread until i get a response",
+     "So will refrase again, Kuna mtu nilimuazima begi langu la nguo, nime msahau, Kama anakumbuka naomba anipe status ya ilo begi Nina shida nalo. @mtuchi out 😎 ✌️", ]
+]
 
 # Count variable to identify the number of messages to be sent
 count = 0
-while count<len(msgToSend):
+while count < len(msgToSend):
 
     # Identify time
     curTime = datetime.datetime.now()
@@ -75,7 +78,7 @@ while count<len(msgToSend):
     curSec = curTime.time().second
 
     # if time matches then move further
-    if msgToSend[count][0]==curHour and msgToSend[count][1]==curMin and msgToSend[count][2]==curSec:
+    if msgToSend[count][0] == curHour and msgToSend[count][1] == curMin and msgToSend[count][2] == curSec:
         # utility variables to tract count of success and fails
         success = 0
         sNo = 1
@@ -84,7 +87,7 @@ while count<len(msgToSend):
         # Iterate over selected contacts
         for target in targets:
             print(sNo, ". Target is: " + target)
-            sNo+=1
+            sNo += 1
             try:
                 # Select the target
                 x_arg = '//span[contains(@title,' + target + ')]'
@@ -98,10 +101,12 @@ while count<len(msgToSend):
                     wait5.until(EC.presence_of_element_located((
                         By.ID, "input-chatlist-search"
                     )))
-                    inputSearchBox = driver.find_element_by_id("input-chatlist-search")
+                    inputSearchBox = driver.find_element_by_id(
+                        "input-chatlist-search")
                     time.sleep(0.5)
                     # click the search button
-                    driver.find_element_by_xpath('/html/body/div/div/div/div[2]/div/div[2]/div/button').click()
+                    driver.find_element_by_xpath(
+                        '/html/body/div/div/div/div[2]/div/div[2]/div/button').click()
                     time.sleep(1)
                     inputSearchBox.clear()
                     inputSearchBox.send_keys(target[1:len(target) - 1])
@@ -124,13 +129,15 @@ while count<len(msgToSend):
                 # taeget is your target Name and msgToSend is you message
                 msgcount = 0
                 while (msgcount < 10000):
-                    input_box.send_keys("@" + target + msgToSend[count][3] +", "+ msgToSend[count][4] + Keys.SHIFT + Keys.ENTER) # + Keys.ENTER (Uncomment it if your msg doesnt contain '\n')
+                    # + Keys.ENTER (Uncomment it if your msg doesnt contain '\n')
+                    input_box.send_keys(
+                        "@" + target + Keys.SHIFT + Keys.ENTER + msgToSend[count][3] + ", " + msgToSend[count][4])
                     # input_box.send_keys("Hello, " + target + "."+ Keys.SHIFT + Keys.ENTER + msgToSend[count][3] + Keys.SPACE) # + Keys.ENTER (Uncomment it if your msg doesnt contain '\n')
                     # Link Preview Time, Reduce this time, if internet connection is Good
                     time.sleep(2)
                     # input_box.send_keys(Keys.ENTER)
-                    print("Successfully Send Message to : "+ target + '\n')
-                    success+=1
+                    print("Successfully Send Message to : " + target + '\n')
+                    success += 1
                     time.sleep(0.5)
                     msgcount = msgcount + 1
 
@@ -144,5 +151,5 @@ while count<len(msgToSend):
         print("Failed to Sent to: ", len(failList))
         print(failList)
         print('\n\n')
-        count+=1
+        count += 1
 driver.quit()
