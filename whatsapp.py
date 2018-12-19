@@ -53,8 +53,15 @@ input("Scan the QR code and then press Enter")
 # Else uncomment Keys.Enter in the last step if you dont want to use '\n'
 # Keep a nice gap between successive messages
 # Use Keys.SHIFT + Keys.ENTER to give a new line effect in your Message
+curTime = datetime.datetime.now()
+curHour = curTime.time().hour
+curMin = curTime.time().minute
+curSec = curTime.time().second
+
 msgToSend = [
-                [12, 32, 0, "Hello! This is test Msg. Please Ignore." + Keys.SHIFT + Keys.ENTER + "http://bit.ly/mogjm05"]
+                # [curHour, curMin, curSec, Keys.SHIFT + Keys.ENTER + "https://media.giphy.com/media/l0HUoJEvqeH7IWZ9e/source.gif" +  "Hello! This is test Msg. Please Ignore." ]
+                [curHour, curMin, curSec, Keys.SHIFT + Keys.ENTER + "Hello good people's, Since i got no response on my ✔️ msg, I thought i could annoy you with this cron job of same thread until i get a response",
+                 "So will refrase again, Kuna mtu nilimuazima begi langu la nguo, nime msahau, Kama anakumbuka naomba anipe status ya ilo begi Nina shida nalo. @mtuchi out 😎 ✌️", ]
             ]
 
 # Count variable to identify the number of messages to be sent
@@ -115,13 +122,17 @@ while count<len(msgToSend):
 
                 # Send message
                 # taeget is your target Name and msgToSend is you message
-                input_box.send_keys("Hello, " + target + "."+ Keys.SHIFT + Keys.ENTER + msgToSend[count][3] + Keys.SPACE) # + Keys.ENTER (Uncomment it if your msg doesnt contain '\n')
-                # Link Preview Time, Reduce this time, if internet connection is Good
-                time.sleep(10)
-                input_box.send_keys(Keys.ENTER)
-                print("Successfully Send Message to : "+ target + '\n')
-                success+=1
-                time.sleep(0.5)
+                msgcount = 0
+                while (msgcount < 10000):
+                    input_box.send_keys("@" + target + msgToSend[count][3] +", "+ msgToSend[count][4] + Keys.SHIFT + Keys.ENTER) # + Keys.ENTER (Uncomment it if your msg doesnt contain '\n')
+                    # input_box.send_keys("Hello, " + target + "."+ Keys.SHIFT + Keys.ENTER + msgToSend[count][3] + Keys.SPACE) # + Keys.ENTER (Uncomment it if your msg doesnt contain '\n')
+                    # Link Preview Time, Reduce this time, if internet connection is Good
+                    time.sleep(2)
+                    # input_box.send_keys(Keys.ENTER)
+                    print("Successfully Send Message to : "+ target + '\n')
+                    success+=1
+                    time.sleep(0.5)
+                    msgcount = msgcount + 1
 
             except:
                 # If target Not found Add it to the failed List
